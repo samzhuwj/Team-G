@@ -9,7 +9,7 @@
 ## Run the contract Payroll
 **Add 10 Employees**
 
-|Serial No. |Address |Sarary |
+|Serial No. |Address |Salary |
 |-----------|--------|-------|
 |1 |"0x583031d1113ad414f02576bd6afabfb30214022a" |1 |
 |2 |"0x583031d1113ad414f02576bd6afabfb30214022b" |1 |
@@ -40,3 +40,25 @@
 |10 |29275 |8003 |
 |11 |29275 |8003 |
 |12 |29275 |8003 |
+
+**Cost of Gas after Optimization**
+
+|Serial No. |transaction cost |execution cost |
+|-----------|-----------------|---------------|
+|1 |22122 |850 |
+|2 |22122 |850 |
+|3 |22122 |850 |
+|4 |22122 |850 |
+|5 |22122 |850 |
+|6 |22122 |850 |
+|7 |22122 |850 |
+|8 |22122 |850 |
+|9 |22122 |850 |
+|10 |22122 |850 |
+|11 |22122 |850 |
+|12 |22122 |850 |
+
+## Optimization
+Based on data from running the original contract, the cost of gas for transaction to Payroll.calculateRunway grows by around 1600 gas for every employee and salary increases. The reason is that the for-loop in the function calculateRunway calculates the totalSalary by calculating all the employees every employee increases.
+
+The solution is to use a variable totalSalary to avoid high gas cost in for-loop. The data after the code optimization shows it works.
