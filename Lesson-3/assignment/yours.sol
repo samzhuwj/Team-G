@@ -21,6 +21,13 @@ contract Payroll {
         uint payment = employee.salary * (now - employee.lastPayday) / payDuration;
         employee.id.transfer(payment);
     }
+
+    function checkEmployee(address  employeeId) returns (uint salary, uint lastPayday) {
+        var employee = employees[employeeId];
+        
+        salary = employee.salary;
+        lastPayday = employee.lastPayday;
+    }
     
     function addEmployee(address employeeId, uint salary) {
         require(msg.sender == owner);
