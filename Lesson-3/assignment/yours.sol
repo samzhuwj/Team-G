@@ -16,8 +16,7 @@ contract Payroll {
 
     address owner;
     mapping(address=>Employee) public employees;
-    uint public totalSalary = 0;
-    uint public totalPaid = 0;
+    uint totalSalary = 0;
   
     function Payroll() {
         owner = msg.sender;
@@ -35,8 +34,7 @@ contract Payroll {
     }    
     
     function _partialPaid(Employee employee) private {
-        uint payment = employee.salary * (now - employee.lastPayday) / payDuration;
-        totalPaid += payment;
+        uint payment = employee.salary.mul(now.sub(employee.lastPayday)).div(payDuration);
         employee.id.transfer(payment);
     }
     
@@ -44,7 +42,7 @@ contract Payroll {
         var employee = employees[employeeId];
         
         assert(employee.id == 0x0);        
-        uint newSalary = salary * 1 ether;
+        uint newSalary = salary.mul(1 ether);
 
         employees[employeeId] = Employee(employeeId,newSalary,now);
         totalSalary = totalSalary.add(newSalary);
@@ -75,7 +73,7 @@ contract Payroll {
     }
     
     function calculateRunway() returns (uint) {
-        return this.balance / totalSalary;
+        return this.balance.div(totalSalary);
     }
     
     function hasEnoughFund() returns (bool) {
@@ -88,7 +86,6 @@ contract Payroll {
         uint nextPayday = employee.lastPayday.sub(payDuration);
         assert(nextPayday < now);
 
-        totalPaid += employee.salary;
         employees[msg.sender].lastPayday = nextPayday;
         employee.id.transfer(employee.salary);
     }
