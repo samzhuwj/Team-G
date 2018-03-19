@@ -1,9 +1,10 @@
 pragma solidity ^0.4.14;
 
 import "./SafeMath.sol";
+import "./Ownable.sol";
 
 
-contract Payroll {
+contract Payroll is Ownable {
     using SafeMath for uint;
     
     struct Employee {
@@ -14,19 +15,9 @@ contract Payroll {
     
     uint constant payDuration = 10 seconds;
 
-    address owner;
     mapping(address=>Employee) public employees;
     uint totalSalary = 0;
-  
-    function Payroll() {
-        owner = msg.sender;
-    }
-    
-    modifier onlyOwner {
-        require(msg.sender == owner);
-        _;
-    }
-    
+      
     modifier employeeExist(address employeeId) {
        var employee = employees[employeeId];
        assert(employee.id != 0x0);
