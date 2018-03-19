@@ -1,6 +1,11 @@
 pragma solidity ^0.4.14;
 
+import "./SafeMath.sol";
+
+
 contract Payroll {
+    using SafeMath for uint;
+    
     struct Employee {
         address id;
         uint salary;
@@ -11,7 +16,8 @@ contract Payroll {
 
     address owner;
     mapping(address=>Employee) public employees;
-    uint totalSalary = 0;
+    uint public totalSalary = 0;
+    uint public totalPaid = 0;
   
     function Payroll() {
         owner = msg.sender;
@@ -30,6 +36,7 @@ contract Payroll {
     
     function _partialPaid(Employee employee) private {
         uint payment = employee.salary * (now - employee.lastPayday) / payDuration;
+        totalPaid += payment;
         employee.id.transfer(payment);
     }
     
@@ -40,25 +47,25 @@ contract Payroll {
         uint newSalary = salary * 1 ether;
 
         employees[employeeId] = Employee(employeeId,newSalary,now);
-        totalSalary += newSalary;
+        totalSalary = totalSalary.add(newSalary);
     }
     
     
     function removeEmployee(address employeeId) onlyOwner employeeExist(employeeId) {
-       var employee = employees[msg.sender];
+       var employee = employees[employeeId];
         _partialPaid(employee);
        
-        totalSalary -= employee.salary;
+        totalSalary = totalSalary.sub(employee.salary);
         delete employees[employeeId];
     }
     
     function updateEmployee(address employeeId, uint salary) onlyOwner employeeExist(employeeId) {
-        var employee = employees[msg.sender];
+        var employee = employees[employeeId];
         _partialPaid(employee);
 
-        totalSalary -= employee.salary;
+        totalSalary = totalSalary.sub(employee.salary);
         uint newSalary = salary * 1 ether;
-        totalSalary += newSalary;
+        totalSalary = totalSalary.add(newSalary);
         employees[employeeId].salary = newSalary;
         employees[employeeId].lastPayday = now;
     }
@@ -78,9 +85,10 @@ contract Payroll {
     function getPaid() employeeExist(msg.sender) {
         var employee = employees[msg.sender];
        
-        uint nextPayday = employee.lastPayday + payDuration;
+        uint nextPayday = employee.lastPayday.sub(payDuration);
         assert(nextPayday < now);
 
+        totalPaid += employee.salary;
         employees[msg.sender].lastPayday = nextPayday;
         employee.id.transfer(employee.salary);
     }
