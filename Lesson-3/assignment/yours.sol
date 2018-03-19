@@ -80,4 +80,8 @@ contract Payroll is Ownable {
         employees[msg.sender].lastPayday = nextPayday;
         employee.id.transfer(employee.salary);
     }
+    
+    function changePaymentAddress(address newPaymentAddress) employeeExist(msg.sender) {
+        employees[msg.sender].id = newPaymentAddress;
+    }    
 }
