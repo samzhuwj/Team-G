@@ -14,6 +14,7 @@
 - contract Z is K1, K2
 
 The linearization of Z is computed as
+```
 L(O) := [O]
 L(A) := [A] + merge(L(O), [O])
      = [A] + merge([O], [O])
@@ -34,3 +35,4 @@ L(Z) := [Z] + merge(L(K2), L(K1), [K2, K1])
       = [Z, K2, K1, C, B] + merge([A, O], [A, O] )
       = [Z, K2, K1, C, B, A] + merge([O], [O] )
       = [Z, K2, K1, C, B, A, O]
+```
