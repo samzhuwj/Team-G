@@ -1,7 +1,4 @@
-## 硅谷live以太坊智能合约 第四课作业
-这里是同学提交作业的目录
-
-### 第四课：课后作业
+## 第四课：课后作业
 - 将第三课完成的payroll.sol程序导入truffle工程
 - 在test文件夹中，写出对如下两个函数的单元测试：
 - function addEmployee(address employeeId, uint salary) onlyOwner
