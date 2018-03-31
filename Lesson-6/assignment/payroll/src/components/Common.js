@@ -9,8 +9,29 @@ class Common extends Component {
   }
 
   componentDidMount() {
+    const { payroll, web3 } = this.props;
+    const updateInfo = (error, result) => {
+      if (!error) {
+        this.checkInfo();
+      }
+    }
+  
+    this.newFund1 = payroll.NewFund(updateInfo);
+    this.getPaid1 = payroll.GetPaid(updateInfo);
+    this.newEmployee1 = payroll.NewEmployee(updateInfo);
+    this.updateEmployee1 = payroll.UpdateEmployee(updateInfo);
+    this.removeEmployee1 = payroll.RemoveEmployee(updateInfo);
+  
     this.checkInfo();
   }
+  
+   componentWillUnmount() {
+    this.newFund1.stopWatching();
+    this.getPaid1.stopWatching();
+    this.newEmployee1.stopWatching();
+    this.updateEmployee1.stopWatching();
+    this.removeEmployee1.stopWatching();
+   }
 
   checkInfo = () => {
     const { payroll, account, web3 } = this.props;
